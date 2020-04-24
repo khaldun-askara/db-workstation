@@ -16,6 +16,7 @@ namespace db_workstation
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new frm_reg_and_auth());
         }
     }
 }
