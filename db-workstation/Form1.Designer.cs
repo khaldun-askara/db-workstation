@@ -84,6 +84,7 @@
             this.btn_guest.TabIndex = 2;
             this.btn_guest.Text = "Войти как гость";
             this.btn_guest.UseVisualStyleBackColor = true;
+            this.btn_guest.Click += new System.EventHandler(this.btn_guest_Click);
             // 
             // btn_reg
             // 

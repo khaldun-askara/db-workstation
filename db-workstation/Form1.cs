@@ -156,6 +156,26 @@ namespace db_workstation
                 return;
             }
             MessageBox.Show("Аутентификация прошла успешно!");
+            frm_tables arm;
+            int role_id = database.ReturnRole(correct_login);
+            switch (role_id)
+            {
+                case 1: arm = new frm_tables(Role.Admin); break;
+                case 2: arm = new frm_tables(Role.Operator); break;
+                default: arm = new frm_tables(); break;
+            }
+            this.Hide();
+            arm.ShowDialog();
+            this.Show();
+            Again();
+        }
+
+        private void btn_guest_Click(object sender, EventArgs e)
+        {
+            frm_tables arm = new frm_tables();
+            this.Hide();
+            arm.ShowDialog();
+            this.Show();
             Again();
         }
     }
