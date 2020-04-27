@@ -50,7 +50,7 @@ namespace db_workstation
 
         private void dgv_workout_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
-            long temp = 0;
+            int temp = 0;
 
             var row = dgv_workout.Rows[e.RowIndex];
             if (!dgv_workout.IsCurrentRowDirty)
@@ -63,6 +63,7 @@ namespace db_workstation
             foreach (var cell in cellsWithStringErrors)
             {
                 cell.ErrorText = "";
+                cell.Value = login_and_password.DelSpaces(Convert.ToString(cell.Value));
                 if (string.IsNullOrWhiteSpace((string)cell.Value))
                 {
                     cell.ErrorText = "Значение не может быть пустым";
@@ -74,11 +75,13 @@ namespace db_workstation
             foreach (var cell in cellsWithNumberErrors)
             {
                 cell.ErrorText = "";
-                if (!Int64.TryParse(Convert.ToString(cell.Value), out temp))
+                cell.Value = login_and_password.DelSpaces(Convert.ToString(cell.Value));
+                if (!Int32.TryParse(Convert.ToString(cell.Value), out temp))
                 {
                     cell.ErrorText = "Введите число";
                     e.Cancel = true;
                 }
+                else cell.Value = temp;
             }
 
             var cellsWithComboBoxErrors = new[] {row.Cells["workout_workout_type_id"],
@@ -140,7 +143,7 @@ namespace db_workstation
 
         private void dgv_coach_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
-            long temp = 0;
+            int temp = 0;
 
             // возврат, если строка не менялась
             var row = dgv_coach.Rows[e.RowIndex];
@@ -154,6 +157,7 @@ namespace db_workstation
             foreach (var cell in cellsWithStringErrors)
             {
                 cell.ErrorText = "";
+                cell.Value = login_and_password.DelSpaces(Convert.ToString(cell.Value));
                 if (string.IsNullOrWhiteSpace((string)cell.Value))
                 {
                     cell.ErrorText = "Значение не может быть пустым";
@@ -168,11 +172,13 @@ namespace db_workstation
             foreach (var cell in cellsWithNumberErrors)
             {
                 cell.ErrorText = "";
-                if (!Int64.TryParse(Convert.ToString(cell.Value), out temp))
+                cell.Value = login_and_password.DelSpaces(Convert.ToString(cell.Value));
+                if (!Int32.TryParse(Convert.ToString(cell.Value), out temp))
                 {
                     cell.ErrorText = "Введите число";
                     e.Cancel = true;
                 }
+                else cell.Value = temp;
             }
 
             // проверка комбобокса
@@ -298,7 +304,7 @@ namespace db_workstation
 
         private void dgv_branch_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
-            long temp = 0;
+            int temp = 0;
 
             var row = dgv_branch.Rows[e.RowIndex];
             if (!dgv_branch.IsCurrentRowDirty)
@@ -311,6 +317,7 @@ namespace db_workstation
             foreach (var cell in cellsWithStringErrors)
             {
                 cell.ErrorText = "";
+                cell.Value = login_and_password.DelSpaces(Convert.ToString(cell.Value));
                 if (string.IsNullOrWhiteSpace((string)cell.Value))
                 {
                     cell.ErrorText = "Значение не может быть пустым";
@@ -322,11 +329,13 @@ namespace db_workstation
             foreach (var cell in cellsWithNumberErrors)
             {
                 cell.ErrorText = "";
-                if (!Int64.TryParse(Convert.ToString(cell.Value), out temp))
+                cell.Value = login_and_password.DelSpaces(Convert.ToString(cell.Value));
+                if (!Int32.TryParse(Convert.ToString(cell.Value), out temp))
                 {
                     cell.ErrorText = "Введите число";
                     e.Cancel = true;
                 }
+                else cell.Value = temp;
             }
 
             if (row.Tag != null
@@ -393,7 +402,7 @@ namespace db_workstation
 
         private void dgv_inventory_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
-            long temp = 0;
+            int temp = 0;
 
             var row = dgv_inventory.Rows[e.RowIndex];
             if (!dgv_inventory.IsCurrentRowDirty)
@@ -405,11 +414,13 @@ namespace db_workstation
             foreach (var cell in cellsWithNumberErrors)
             {
                 cell.ErrorText = "";
-                if (!Int64.TryParse(Convert.ToString(cell.Value), out temp))
+                cell.Value = login_and_password.DelSpaces(Convert.ToString(cell.Value));
+                if (!Int32.TryParse(Convert.ToString(cell.Value), out temp))
                 {
                     cell.ErrorText = "Введите число";
                     e.Cancel = true;
                 }
+                else cell.Value = temp;
             }
 
             var cellsWithComboBoxErrors = new[] {row.Cells["branch_id"],
@@ -552,10 +563,10 @@ namespace db_workstation
             var lvi = new ListViewItem(new[]
                     {
                         frm_insert.Login,
-                        add_result.Item2,
-                        add_result.Item3,
                         ((DateTime) frm_insert.Reg_date).ToLongDateString(),
-                        frm_insert.Role_name
+                        frm_insert.Role_name,
+                        add_result.Item2,
+                        add_result.Item3
                     })
             {
                 Tag = Tuple.Create(add_result.Item1, frm_insert.Reg_date, frm_insert.Role_id)
@@ -594,11 +605,11 @@ namespace db_workstation
                 curr_user.SubItems[0].Text = frm_insert.Login;
                 if (hash_ahd_salt.Item1 != "")
                 {
-                    curr_user.SubItems[1].Text = hash_ahd_salt.Item1;
-                    curr_user.SubItems[2].Text = hash_ahd_salt.Item2;
+                    curr_user.SubItems[3].Text = hash_ahd_salt.Item1;
+                    curr_user.SubItems[4].Text = hash_ahd_salt.Item2;
                 }
-                curr_user.SubItems[3].Text = frm_insert.Reg_date.ToLongDateString();
-                curr_user.SubItems[4].Text = frm_insert.Role_name;
+                curr_user.SubItems[1].Text = frm_insert.Reg_date.ToLongDateString();
+                curr_user.SubItems[2].Text = frm_insert.Role_name;
                 curr_user.Tag = Tuple.Create(user_id, frm_insert.Reg_date, frm_insert.Role_id);
             }
         }

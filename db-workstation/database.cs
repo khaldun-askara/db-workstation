@@ -174,10 +174,10 @@ namespace db_workstation
         {
             listview_db.Clear();
             listview_db.Columns.Add("Логин");
-            listview_db.Columns.Add("Хеш пароля");
-            listview_db.Columns.Add("Соль");
             listview_db.Columns.Add("Дата регистрации");
             listview_db.Columns.Add("Роль");
+            listview_db.Columns.Add("Хеш пароля");
+            listview_db.Columns.Add("Соль");
             using (var sConn = new NpgsqlConnection(sConnStr))
             {
                 sConn.Open();
@@ -192,10 +192,10 @@ namespace db_workstation
                     var lvi = new ListViewItem(new[]
                     {
                         (string) reader["login"],
-                        (string) reader["password_hash"],
-                        (string) reader["salt"],
                         ((DateTime) reader["reg_date"]).ToLongDateString(),
-                        (string) reader["role_name"]
+                        (string) reader["role_name"],
+                        (string) reader["password_hash"],
+                        (string) reader["salt"]                        
                     })
                     {
                         Tag = Tuple.Create((long)reader["user_id"], (DateTime)reader["reg_date"], (int)reader["role_id"])
