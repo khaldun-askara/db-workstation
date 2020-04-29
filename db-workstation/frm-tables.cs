@@ -35,7 +35,7 @@ namespace db_workstation
             //запросы???
             cmB_choose_coach.DisplayMember = "coach_name";
             cmB_choose_coach.ValueMember = "coach_id";
-            cmB_choose_coach.DataSource = database.GetCoachNames();
+            cmB_choose_coach.DataSource = database.GetCoachNames(false);
             database.InitializeDGVtimetable_today(dgv_timetable_today);
 
 
@@ -533,7 +533,7 @@ namespace db_workstation
                     database.InitializeDGVInventory(dgv_inventory);
                     break;
                 case 4:
-                    cmB_choose_coach.DataSource = database.GetCoachNames();
+                    cmB_choose_coach.DataSource = database.GetCoachNames(false);
                     break;
                 case 5:
                     database.InitializeDGVtimetable_today(dgv_timetable_today);
@@ -622,7 +622,7 @@ namespace db_workstation
             if (frm_delete.ShowDialog() != DialogResult.OK)
                 return;
             long[] id_for_delete = lv_main.SelectedItems.Cast<ListViewItem>()
-                .Select(x => ((Tuple<long, DateTime>)x.Tag).Item1).ToArray();
+                .Select(x => ((Tuple<long, DateTime, int>)x.Tag).Item1).ToArray();
             try
             {
                 database.DeleteUsers(id_for_delete);
@@ -634,6 +634,78 @@ namespace db_workstation
             }
             foreach (ListViewItem curr_user in lv_main.SelectedItems)
                 lv_main.Items.Remove(curr_user);
+        }
+
+        private void dgv_workout_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (!(dgv_workout.CurrentCell is DataGridViewComboBoxCell))
+                return;
+            if (dgv_workout.IsCurrentCellDirty)
+            {
+                dgv_workout.CommitEdit(DataGridViewDataErrorContexts.Commit);
+
+            }
+            var branch_id = (int?)dgv_workout.CurrentRow.Cells["workout_branch_id"].Value;
+            var coach_id = (int?)dgv_workout.CurrentRow.Cells["workout_coach_id"].Value;
+            if (dgv_workout.CurrentCell.ColumnIndex == 1 && branch_id.HasValue && branch_id.Value == -1)
+            {
+                //MessageBox.Show("sdfjdlfk");
+                add_branch frm_add_Branch = new add_branch();
+                frm_add_Branch.ShowDialog();
+                ((DataGridViewComboBoxColumn)dgv_workout.Columns["workout_branch_id"]).DataSource = database.GetBranchAddresses();
+                if (dgv_workout.CurrentRow.Tag != null)
+                     ((DataGridViewComboBoxCell)dgv_workout.CurrentRow.Cells["workout_branch_id"]).Value =
+                                ((Dictionary<string, object>)dgv_workout.CurrentRow.Tag)["workout_branch_id"];
+                else dgv_workout.CurrentRow.Cells["workout_branch_id"].Value = null;
+                dgv_workout.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+            if (dgv_workout.CurrentCell.ColumnIndex == 2 && coach_id.HasValue && coach_id.Value == -1)
+            {
+                add_coach frm_add_coach = new add_coach();
+                frm_add_coach.ShowDialog();
+                ((DataGridViewComboBoxColumn)dgv_workout.Columns["workout_coach_id"]).DataSource = database.GetCoachNames();
+                if (dgv_workout.CurrentRow.Tag != null)
+                    ((DataGridViewComboBoxCell)dgv_workout.CurrentRow.Cells["workout_coach_id"]).Value =
+                               ((Dictionary<string, object>)dgv_workout.CurrentRow.Tag)["workout_coach_id"];
+                else dgv_workout.CurrentRow.Cells["workout_coach_id"].Value = null;
+                dgv_workout.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void dgv_inventory_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (!(dgv_inventory.CurrentCell is DataGridViewComboBoxCell))
+                return;
+            if (dgv_inventory.IsCurrentCellDirty)
+            {
+                dgv_inventory.CommitEdit(DataGridViewDataErrorContexts.Commit);
+
+            }
+            var branch_id = (int?)dgv_inventory.CurrentRow.Cells["branch_id"].Value;
+            var inventory_id = (int?)dgv_inventory.CurrentRow.Cells["inventory_id"].Value;
+            if (dgv_inventory.CurrentCell.ColumnIndex == 0 && branch_id.HasValue && branch_id.Value == -1)
+            {
+                //MessageBox.Show("sdfjdlfk");
+                add_branch frm_add_Branch = new add_branch();
+                frm_add_Branch.ShowDialog();
+                ((DataGridViewComboBoxColumn)dgv_inventory.Columns["branch_id"]).DataSource = database.GetBranchAddresses();
+                if (dgv_inventory.CurrentRow.Tag != null)
+                    ((DataGridViewComboBoxCell)dgv_inventory.CurrentRow.Cells["branch_id"]).Value =
+                               ((Dictionary<string, object>)dgv_inventory.CurrentRow.Tag)["branch_id"];
+                else dgv_inventory.CurrentRow.Cells["branch_id"].Value = null;
+                dgv_inventory.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+            if (dgv_inventory.CurrentCell.ColumnIndex == 1 && inventory_id.HasValue && inventory_id.Value == -1)
+            {
+                add_inventory frm_add_inventory = new add_inventory();
+                frm_add_inventory.ShowDialog();
+                ((DataGridViewComboBoxColumn)dgv_inventory.Columns["inventory_id"]).DataSource = database.GetInventory();
+                if (dgv_inventory.CurrentRow.Tag != null)
+                    ((DataGridViewComboBoxCell)dgv_inventory.CurrentRow.Cells["inventory_id"]).Value =
+                               ((Dictionary<string, object>)dgv_inventory.CurrentRow.Tag)["inventory_id"];
+                else dgv_inventory.CurrentRow.Cells["inventory_id"].Value = null;
+                dgv_inventory.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
         }
     }
 

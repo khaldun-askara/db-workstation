@@ -110,6 +110,7 @@
             this.dgv_workout.RowTemplate.Height = 24;
             this.dgv_workout.Size = new System.Drawing.Size(1197, 596);
             this.dgv_workout.TabIndex = 0;
+            this.dgv_workout.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgv_workout_CurrentCellDirtyStateChanged);
             this.dgv_workout.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgv_workout_RowValidating);
             this.dgv_workout.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgv_workout_UserDeletingRow);
             this.dgv_workout.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.dgv_workout_PreviewKeyDown);
@@ -188,6 +189,7 @@
             this.dgv_inventory.RowTemplate.Height = 24;
             this.dgv_inventory.Size = new System.Drawing.Size(1197, 596);
             this.dgv_inventory.TabIndex = 1;
+            this.dgv_inventory.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgv_inventory_CurrentCellDirtyStateChanged);
             this.dgv_inventory.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgv_inventory_RowValidating);
             this.dgv_inventory.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgv_inventory_UserDeletingRow);
             this.dgv_inventory.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.dgv_inventory_PreviewKeyDown);
@@ -329,21 +331,21 @@
             // добавитьToolStripMenuItem
             // 
             this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(161, 26);
             this.добавитьToolStripMenuItem.Text = "Добавить";
             this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.добавитьToolStripMenuItem_Click);
             // 
             // изменитьToolStripMenuItem
             // 
             this.изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
-            this.изменитьToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.изменитьToolStripMenuItem.Size = new System.Drawing.Size(161, 26);
             this.изменитьToolStripMenuItem.Text = "Изменить";
             this.изменитьToolStripMenuItem.Click += new System.EventHandler(this.изменитьToolStripMenuItem_Click);
             // 
             // удалитьToolStripMenuItem
             // 
             this.удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
-            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(161, 26);
             this.удалитьToolStripMenuItem.Text = "Удалить";
             this.удалитьToolStripMenuItem.Click += new System.EventHandler(this.удалитьToolStripMenuItem_Click);
             // 

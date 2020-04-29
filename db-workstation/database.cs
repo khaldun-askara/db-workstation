@@ -232,11 +232,12 @@ namespace db_workstation
                     sCommand.CommandText = "SELECT branch_id, branch_address FROM branch";
                     var table = new DataTable();
                     table.Load(sCommand.ExecuteReader());
+                    table.Rows.Add(-1, "Добавить филиал");
                     return table;
                 }
             }
         }
-        public static DataTable GetCoachNames()
+        public static DataTable GetCoachNames(bool is_add_button_need = true)
         {
             using (var sConn = new NpgsqlConnection(sConnStr))
             {
@@ -247,6 +248,8 @@ namespace db_workstation
                     sCommand.CommandText = "SELECT coach_id, coach_name FROM coach";
                     var table = new DataTable();
                     table.Load(sCommand.ExecuteReader());
+                    if (is_add_button_need)
+                        table.Rows.Add(-1, "Добавить тренера");
                     return table;
                 }
             }
@@ -277,6 +280,7 @@ namespace db_workstation
                     sCommand.CommandText = "SELECT * FROM inventory";
                     var table = new DataTable();
                     table.Load(sCommand.ExecuteReader());
+                    table.Rows.Add(-1, "Добавить инвентарь");
                     return table;
                 }
             }
@@ -371,14 +375,23 @@ namespace db_workstation
                 Name = "workout_id",
                 Visible = false
             });
-            dgv_workout.Columns.Add(new DataGridViewComboBoxColumn
+            DataGridViewComboBoxColumn cmb_branch = new DataGridViewComboBoxColumn
             {
                 Name = "workout_branch_id",
                 HeaderText = "Филиал",
                 DisplayMember = "branch_address",
                 ValueMember = "branch_id",
                 DataSource = GetBranchAddresses()
-            });
+            };
+            dgv_workout.Columns.Add(cmb_branch);
+            //dgv_workout.Columns.Add(new DataGridViewComboBoxColumn
+            //{
+            //    Name = "workout_branch_id",
+            //    HeaderText = "Филиал",
+            //    DisplayMember = "branch_address",
+            //    ValueMember = "branch_id",
+            //    DataSource = GetBranchAddresses()
+            //});
             dgv_workout.Columns.Add(new DataGridViewComboBoxColumn
             {
                 Name = "workout_coach_id",
@@ -604,6 +617,23 @@ namespace db_workstation
                 sCommand.Parameters.AddWithValue("@branch_phone", branch_phone);
                 sCommand.Parameters.AddWithValue("@branch_area", branch_area);
                 sCommand.Parameters.AddWithValue("@branch_working_hours", branch_working_hours);
+                return (int)sCommand.ExecuteScalar();
+            }
+        }
+
+        public static int InsertInventory(string inventory_name)
+        {
+            using (var sConn = new NpgsqlConnection(sConnStr))
+            {
+                sConn.Open();
+                var sCommand = new NpgsqlCommand
+                {
+                    Connection = sConn,
+                    CommandText = $@"INSERT INTO inventory (inventory_name)
+                                        VALUES (@inventory_name)
+                                        RETURNING inventory_id"
+                };
+                sCommand.Parameters.AddWithValue("@inventory_name", inventory_name);
                 return (int)sCommand.ExecuteScalar();
             }
         }
